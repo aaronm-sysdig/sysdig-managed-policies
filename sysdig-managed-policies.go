@@ -44,8 +44,6 @@ func createPolicy(sysdigAPIEndpoint string, sysdigAPIToken string, policy polici
 	return objResponse, err
 }
 
-var version string
-
 func parseAndValidateParameters() (configuration config.Config, err error) {
 	pflag.BoolVarP(&configuration.Enabled, "enabled", "e", false, "Enable Policies")
 	pflag.StringVarP(&configuration.SysdigAPIEndpoint, "sysdig-api-endpoint", "a", os.Getenv("SYSDIG_API_ENDPOINT"), "Sysdig API Endpoint")
@@ -63,6 +61,8 @@ func parseAndValidateParameters() (configuration config.Config, err error) {
 	return configuration, nil
 }
 
+var VERSION string
+
 func main() {
 	var err error
 
@@ -78,7 +78,7 @@ func main() {
 		log.Fatalf("main:: Error %v", err)
 	}
 
-	log.Printf("main:: Sysdig Managed Policy Importer - Falco Rules v1.141.1-%s", version)
+	log.Printf("main:: Sysdig Managed Policy Importer - Falco Rules v1.141.1-%s", VERSION)
 	for _, policy := range managedSaaSPolicies {
 		policy.Enabled = configuration.Enabled
 		var policyName = fmt.Sprintf("%s%s%s", configuration.PolicyPrefix, policy.Name, configuration.PolicySuffix)
