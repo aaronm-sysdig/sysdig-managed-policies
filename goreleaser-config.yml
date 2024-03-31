@@ -1,0 +1,16 @@
+project_name: sysdig-tanzu-scanner
+    
+builds:
+  - id: "sysdig-tanzu-scanner"
+    main: ./sysdig-tanzu-scanner.go
+    binary: sysdig-tanzu-scanner
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X "main.VERSION={{.Env.NEW_VERSION}}"
