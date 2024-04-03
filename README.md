@@ -55,7 +55,7 @@ The tool supports several command-line parameters to customize its behavior. The
 Run the importer with a specific API token and endpoint:
 
 ```bash
-./sysdig-managed-policies-importer --enabled --sysdig-api-endpoint "https://api.sysdig.com" --secure-api-token "your_api_token_here"
+./sysdig-managed-policies --enabled --sysdig-api-endpoint "https://api.sysdig.com" --secure-api-token "your_api_token_here"
 ```
 
 Alternatively, use environment variables:
@@ -63,7 +63,7 @@ Alternatively, use environment variables:
 ```bash
 export SYSDIG_API_ENDPOINT="https://api.sysdig.com"
 export SECURE_API_TOKEN="your_api_token_here"
-./sysdig-managed-policies-importer --enabled
+./sysdig-managed-policies --enabled
 ```
 
 ## Contributing
