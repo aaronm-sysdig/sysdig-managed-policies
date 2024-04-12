@@ -1,0 +1,16 @@
+project_name: sysdig-managed-policies
+    
+builds:
+  - id: "sysdig-managed-policies"
+    main: ./sysdig-managed-policies.go
+    binary: sysdig-managed-policies
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X "main.VERSION={{.Env.NEW_VERSION}}"
