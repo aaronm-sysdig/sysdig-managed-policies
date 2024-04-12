@@ -40,7 +40,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add ./VERSION
           git commit -m "Increment version to ${{ env.NEW_VERSION }}"
-          git tag "v1.141.1-${{ env.NEW_VERSION }}"
+          git tag ${{ env.NEW_VERSION }}
           git push origin HEAD --tags
 
       - name: Check updated VERSION file
