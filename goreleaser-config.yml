@@ -1,7 +1,7 @@
 project_name: sysdig-managed-policies
     
 builds:
-  - id: "sysdig-tanzu-scanner"
+  - id: "sysdig-managed-policies"
     main: ./sysdig-managed-policies.go
     binary: sysdig-managed-policies
     goos:
