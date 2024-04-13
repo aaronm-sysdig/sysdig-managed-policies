@@ -6,4 +6,5 @@ type Config struct {
 	PolicySuffix      string
 	SysdigAPIEndpoint string
 	SysdigAPIToken    string
+	FalcoVersion      string
 }

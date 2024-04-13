@@ -50,6 +50,7 @@ func parseAndValidateParameters() (configuration config.Config, err error) {
 	pflag.StringVarP(&configuration.SysdigAPIToken, "secure-api-token", "k", os.Getenv("SECURE_API_TOKEN"), "Sysdig API Token")
 	pflag.StringVarP(&configuration.PolicyPrefix, "prefix", "p", "", "Sysdig Policy Prefix")
 	pflag.StringVarP(&configuration.PolicySuffix, "suffix", "s", "", "Sysdig Policy Suffix")
+	pflag.StringVarP(&configuration.FalcoVersion, "falco-version", "f", "", "Falco policy version")
 
 	pflag.Parse()
 
@@ -58,39 +59,56 @@ func parseAndValidateParameters() (configuration config.Config, err error) {
 		return configuration, err
 	}
 
+	if configuration.SysdigAPIEndpoint == "" || configuration.SysdigAPIToken == "" {
+		err = errors.New("falco version not specified, cannot continue")
+		return configuration, err
+	}
+
 	return configuration, nil
 }
 
-var VERSION string
+const VERSION = "1.0.1"
 
 func main() {
 	var err error
 
-	managedSaaSPolicies := []policies.Policy{
-		policies.SysdigRuntimeThreatIntelligence,
-		policies.SysdigRuntimeThreatDetection,
-		policies.SysdigRuntimeNotableEvents,
-		policies.SysdigRuntimeActivityLogs,
-	}
-
 	var configuration config.Config
+
+	log.Printf("main:: Sysdig Managed Policy Importer. v%s", VERSION)
 	if configuration, err = parseAndValidateParameters(); err != nil {
 		log.Fatalf("main:: Error %v", err)
 	}
 
-	log.Printf("main:: Sysdig Managed Policy Importer - Falco Rules v1.141.1-%s", VERSION)
-	for _, policy := range managedSaaSPolicies {
-		policy.Enabled = configuration.Enabled
-		var policyName = fmt.Sprintf("%s%s%s", configuration.PolicyPrefix, policy.Name, configuration.PolicySuffix)
-		if objResponse, err := createPolicy(configuration.SysdigAPIEndpoint, configuration.SysdigAPIToken, policy, policyName); err != nil {
-			if objResponse != nil {
-				log.Printf("main:: Error creating Policy '%s'. Status '%d', Error: %v", policyName, objResponse.StatusCode, err)
-			} else {
-				log.Printf("main:: Error creating Policy '%s', Error: %v", policyName, err)
-			}
-		} else {
-			log.Printf("main:: Created Policy '%s'. Policy Enabled?: '%t', HTTP Status '%d'", policyName, policy.Enabled, objResponse.StatusCode)
+	var managedSaaSPolicies []policies.Policy
+
+	// Checks which version to
+	if configuration.FalcoVersion == "0.141.1" {
+		managedSaaSPolicies = []policies.Policy{
+			policies.SysdigRuntimeThreatIntelligence_0_141_1,
+			policies.SysdigRuntimeThreatDetection_0_141_1,
+			policies.SysdigRuntimeNotableEvents_0_141_1,
+			policies.SysdigRuntimeActivityLogs_0_141_1,
 		}
+	} else if configuration.FalcoVersion == "0.141.2" {
+		// ...
+	}
+
+	if managedSaaSPolicies != nil {
+		for _, policy := range managedSaaSPolicies {
+			policy.Enabled = configuration.Enabled
+			var policyName = fmt.Sprintf("%s%s%s", configuration.PolicyPrefix, policy.Name, configuration.PolicySuffix)
+			if objResponse, err := createPolicy(configuration.SysdigAPIEndpoint, configuration.SysdigAPIToken, policy, policyName); err != nil {
+				if objResponse != nil {
+					log.Printf("main:: Error creating Policy '%s'. Status '%d', Error: %v", policyName, objResponse.StatusCode, err)
+				} else {
+					log.Printf("main:: Error creating Policy '%s', Error: %v", policyName, err)
+				}
+			} else {
+				log.Printf("main:: Created Policy '%s'. Policy Enabled?: '%t', HTTP Status '%d'", policyName, policy.Enabled, objResponse.StatusCode)
+			}
+		}
+	} else {
+		log.Printf("main:: Falco version 'v%s' not supported, exiting...", configuration.FalcoVersion)
 	}
 	log.Print("main:: Finished...")
 }

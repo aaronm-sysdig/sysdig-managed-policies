@@ -3,7 +3,7 @@ Notwithstanding anything that may be contained to the contrary in your agreement
 
 # Sysdig Managed Policies Importer
 
-Sysdig Managed Policies Importer is a command-line tool developed in Go, designed to automate the import and management of Sysdig Falco security policies. This tool streamlines the process of deploying standardized security policies across different environments, making it easier for teams to ensure consistent security postures.
+Sysdig Managed Policies Importer is a command-line tool developed in Go, designed to automate the import of Sysdig Falco security policies. This tool streamlines the process of deploying standardised security policies across different environments, making it easier for teams to ensure consistent security postures.
 
 ## Features
 
@@ -15,12 +15,11 @@ Sysdig Managed Policies Importer is a command-line tool developed in Go, designe
 
 
 ### Prerequisites
-- Go version 1.18 or later
+- Go version 1.21 or later
 - Access to a Sysdig account with API token
 
 ### Installation
-
-Clone the repository and build the application:
+Clone the repository, build the application or download release binaries.
 
 ```bash
 git clone https://github.com/aaronm-sysdig/sysdig-managed-policies.git
@@ -40,22 +39,28 @@ Run the application with the necessary flags or environment variables:
 
 The tool supports several command-line parameters to customize its behavior. The following table outlines these parameters, their descriptions, and their corresponding environment variable counterparts when applicable.
 
-| Parameter              | Description                           | Environment Variable    | Default Value |
-|------------------------|---------------------------------------|-------------------------|---------------|
-| `-e, --enabled`        | Enable Polices                        |                         | `false`       |
-| `-a, --sysdig-api-endpoint` | Sysdig API Endpoint              | `SYSDIG_API_ENDPOINT`   |               |
-| `-k, --secure-api-token`   | Sysdig API Token                   | `SECURE_API_TOKEN`      |               |
-| `-p, --prefix`         | Sysdig Policy Prefix                  |                         |               |
-| `-s, --suffix`         | Sysdig Policy Suffix                  |                         |               |
+`--falco-version` will import the ruleset that was default for that particular version of the falco ruleset.  Ensure this matches the currently loaded falco version within your environment.
+
+#### Currently Supported Falco Versions
+`0.141.1` - 06 March 2024
+
+
+| Parameter                   | Description          | Environment Variable    | Default Value |
+|-----------------------------|----------------------|-------------------------|---------------|
+| `-e, --enabled`             | Enable Polices       |                         | `false`       |
+| `-a, --sysdig-api-endpoint` | Sysdig API Endpoint  | `SYSDIG_API_ENDPOINT`   |               |
+| `-k, --secure-api-token`    | Sysdig API Token     | `SECURE_API_TOKEN`      |               |
+| `-p, --prefix`              | Sysdig Policy Prefix |                         |               |
+| `-s, --suffix`              | Sysdig Policy Suffix |                         |               |
+| `-f, --falco-version`       | Falco Rule Version   |                         |               |
 
 **Note**: Parameters with an associated environment variable can be configured either via the command line or by setting the environment variable.  Presedence is given to the command line variable
 
 ### Examples
-
 Run the importer with a specific API token and endpoint:
 
 ```bash
-./sysdig-managed-policies --enabled --sysdig-api-endpoint "https://api.sysdig.com" --secure-api-token "your_api_token_here"
+./sysdig-managed-policies --enabled --sysdig-api-endpoint "https://api.sysdig.com" --secure-api-token "your_api_token_here" --falco-version "0.141.1"
 ```
 
 Alternatively, use environment variables:
@@ -63,9 +68,8 @@ Alternatively, use environment variables:
 ```bash
 export SYSDIG_API_ENDPOINT="https://api.sysdig.com"
 export SECURE_API_TOKEN="your_api_token_here"
-./sysdig-managed-policies --enabled
+./sysdig-managed-policies -p "Prefix-" -s "-Suffix" --falco-version "0.141.1"
 ```
 
 ## Contributing
-
 We welcome contributions! Please feel free to submit pull requests or open issues to improve the tool or suggest new features.

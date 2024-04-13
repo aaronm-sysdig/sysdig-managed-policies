@@ -12,7 +12,7 @@ type Policy struct {
 	Type                   string   `json:"type"`
 }
 
-var SysdigRuntimeThreatIntelligence = Policy{
+var SysdigRuntimeThreatIntelligence_0_141_1 = Policy{
 	Name:        "Sysdig Runtime Threat Intelligence",
 	Description: "This policy contains rules using Indicators of Compromise curated by the Sysdig Threat Intelligence Team from premium, OSINT, and custom threat intelligence feeds. Any events from the rules in this policy should be considered serious and investigated as soon as possible.",
 	Enabled:     true,
@@ -38,7 +38,7 @@ var SysdigRuntimeThreatIntelligence = Policy{
 	Type:                   "falco",
 }
 
-var SysdigRuntimeThreatDetection = Policy{
+var SysdigRuntimeThreatDetection_0_141_1 = Policy{
 	Name:        "Sysdig Runtime Threat Detection",
 	Description: "This policy contains rules which Sysdig considers High Confidence of a security incident. They are tightly coupled to common attacker TTP's. They have been designed to minimize false positives but may still result in some depending on your environment.",
 	Enabled:     true,
@@ -98,7 +98,7 @@ var SysdigRuntimeThreatDetection = Policy{
 	Type:                   "falco",
 }
 
-var SysdigRuntimeNotableEvents = Policy{
+var SysdigRuntimeNotableEvents_0_141_1 = Policy{
 	Name:        "Sysdig Runtime Notable Events",
 	Description: "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
 	Enabled:     true,
@@ -170,7 +170,7 @@ var SysdigRuntimeNotableEvents = Policy{
 	Type:                   "falco",
 }
 
-var SysdigRuntimeActivityLogs = Policy{
+var SysdigRuntimeActivityLogs_0_141_1 = Policy{
 	Name:        "Sysdig Runtime Activity Logs",
 	Description: "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled. Additional manual tuning will likely be required.",
 	Enabled:     false,
